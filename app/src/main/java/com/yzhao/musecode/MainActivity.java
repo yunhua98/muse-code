@@ -106,8 +106,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // list of current characters to be displayed
     private ArrayList<Character> charList = new ArrayList<>();
 
+<<<<<<< HEAD
     // this holds the sequence of signals that we receive
     private SignalQueue sigQ = new SignalQueue();
+=======
+    // TextView of the text translated from Morse
+    private TextView translateTextView;
+
+    // adapter for the translateTextView
+    private translationAdapter tAdapter;
+>>>>>>> origin/master
 
     private final Runnable tickUi = new Runnable() {
         @Override
@@ -138,6 +146,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         initUI();
 
         handler.post(tickUi);
+
+
     }
 
     @Override
@@ -223,6 +233,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         blink = p.getBlink();
         lastJawClench = jawClench;
         jawClench = p.getJawClench();
+<<<<<<< HEAD
         if(blink && jawClench) { // default to jaw clench if both occur
             blink = false;
         }
@@ -235,14 +246,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
         else if(jawClench && !lastJawClench) { // otherwise, if it's a jawClench (and not a continuous one), put it in the sigQueue as a jawClench
             sigQ.add(new Signal(false));
         }
+=======
+        if (blink && jawClench) blink = false; // jawClench overrides blink
+>>>>>>> origin/master
     }
 
     // update the displayed EKG values
     public void updateEKG() {
         TextView blinkView = (TextView) findViewById(R.id.blink);
+<<<<<<< HEAD
         blinkView.setText(String.format("blink: %d\n", (blink && !lastBlink) ? 1 : 0));
         TextView jawView = (TextView) findViewById(R.id.jaw);
         jawView.setText(String.format("jaw: %d\n", (jawClench && !lastJawClench ? 1:0)));
+=======
+        blinkView.setText(String.format("blink: %d\n", (blink ? 1 : 0)));
+
+>>>>>>> origin/master
     }
 
     private void getAccelValues(MuseDataPacket p) {
@@ -362,6 +381,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         Spinner musesSpinner = (Spinner) findViewById(R.id.muses_spinner);
         musesSpinner.setAdapter(spinnerAdapter);
+
+        translateTextView = (TextView) findViewById(R.id.translation);
+        tAdapter = new TranslationAdapter(sigQ, nodQ, backspaceQ);
+        translateTextView.setAdapter(tAdapter);
+
     }
 
     /**

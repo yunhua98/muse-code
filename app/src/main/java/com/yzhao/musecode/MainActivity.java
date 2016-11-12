@@ -100,6 +100,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // list of current characters to be displayed
     private ArrayList<Character> charList = new ArrayList<>();
 
+    // morse dictionary converter
+    private MorseDictionary dict = new MorseDictionary();
+
 
     private final Runnable tickUi = new Runnable() {
         @Override

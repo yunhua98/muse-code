@@ -40,7 +40,7 @@ public class MorseDictionary {
         morseAlpha.put(new SignalQueue("--.."), 'Z');
     }
 
-    char translate(SignalQueue s) {
+    public char translate(SignalQueue s) {
         if (morseAlpha.containsKey(s)) {
             return morseAlpha.get(s);
         }

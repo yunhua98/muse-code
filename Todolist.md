@@ -18,3 +18,4 @@ SignalQueue will have two constructors:
  
 morseDictionary class:
   - default constructor initializes private HashMap: keys are SignalQueues, values are Characters
+  - translate(SignalQueue) returns a char that the SignalQueue represents, null if invalid SignalQueue

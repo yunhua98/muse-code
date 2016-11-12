@@ -23,12 +23,11 @@
         android:textSize="16sp"
         android:text="unknown" />
     <TextView
-        android:id="@+id/version"
+        android:id="@+id/translation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textSize="16sp"
-        android:text="unknown" />
+        android:textSize="16sp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"

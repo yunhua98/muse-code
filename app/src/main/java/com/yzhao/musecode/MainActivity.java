@@ -213,12 +213,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void receiveMuseArtifactPacket(final MuseArtifactPacket p, final Muse muse) {
         blink = p.getBlink();
         jawClench = p.getJawClench();
+        if (blink && jawClench) blink = false; // jawClench overrides blink
     }
 
     // update the displayed EKG values
     public void updateEKG() {
         TextView blinkView = (TextView) findViewById(R.id.blink);
         blinkView.setText(String.format("blink: %d\n", (blink ? 1 : 0)));
+
     }
 
     private void getAccelValues(MuseDataPacket p) {

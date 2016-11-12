@@ -12,6 +12,7 @@ Dictionary (wrapped HashMap) converting from a SignalQueue to letters -
 SignalQueue will have two constructors:
   - one taking in data from Muse
   - one from String
+  - overloads the = operator
  
 Dictionary class:
   - default constructor initializes private HashMap: keys are SignalQueues, values are Characters

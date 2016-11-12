@@ -217,8 +217,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     // update the displayed EKG values
     public void updateEKG() {
-        TextView blink = (TextView) findViewById(R.id.blink);
-        blink.setText(String.format("blink:%d\n", blink));
+        TextView blinkView = (TextView) findViewById(R.id.blink);
+        blinkView.setText(String.format("blink: %d\n", (blink ? 1 : 0)));
     }
 
     private void getAccelValues(MuseDataPacket p) {

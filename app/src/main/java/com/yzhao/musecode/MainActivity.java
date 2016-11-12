@@ -160,7 +160,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 muse.runAsynchronously();
             }
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
         else if(v.getId() == R.id.refresh) {
             manager.stopListening();
             manager.startListening();
@@ -195,7 +198,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         for (Muse m : list) {
             spinnerAdapter.add(m.getName() + " - " + m.getMacAddress());
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
     }
 
     public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
@@ -301,7 +307,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             activityRef.get().receiveMuseConnectionPacket(p, muse);
         }
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
     // datalistener class goes here:
 
     class DataListener extends MuseDataListener {
@@ -381,6 +390,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             introDialog.show();
         }
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 }
 

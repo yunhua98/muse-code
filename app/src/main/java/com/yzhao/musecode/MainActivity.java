@@ -100,8 +100,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // list of current characters to be displayed
     private ArrayList<Character> charList = new ArrayList<>();
 
-    //
+    // TextView of the text translated from Morse
     private TextView translateTextView;
+
+    // adapter for the translateTextView
+    private translationAdapter tAdapter;
 
     private final Runnable tickUi = new Runnable() {
         @Override
@@ -345,7 +348,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Spinner musesSpinner = (Spinner) findViewById(R.id.muses_spinner);
         musesSpinner.setAdapter(spinnerAdapter);
 
-        translateTextView = (TextView) findViewById(R.id.translate);
+        translateTextView = (TextView) findViewById(R.id.translation);
+        tAdapter = new TranslationAdapter(sigQ, nodQ, backspaceQ);
+        translateTextView.setAdapter(tAdapter);
+
     }
 
     /**

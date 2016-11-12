@@ -9,13 +9,14 @@ import java.util.LinkedList;
 public class AccelerometerData {
 
     private final int MAX_WINDOW = 50; // maximum size of linkedlist, data given 50 Hz
-    private final float THRESHOLD = -0.5f; // threshold of detection
     private final int NUM_ABOVE_THRESH_REQUIRED = 3; // minimum number of values past threshold that we need to detect to count as a tilt
+    private float threshold; // threshold of detection
     private int indexOfLastTilt;
     private LinkedList<Float> xQ;
     private boolean tiltedRecently; // whether the data has been tilted in last
 
-    public AccelerometerData () {
+    public AccelerometerData (float threshold) {
+        this.threshold = threshold;
         xQ = new LinkedList<>();
         tiltedRecently = false;
         indexOfLastTilt = -1; // none detected yet
@@ -28,12 +29,12 @@ public class AccelerometerData {
         if (indexOfLastTilt == -1) tiltedRecently = false;
     }
 
-    public boolean isLeftTilt() { // checks within last second for a value past threshold
+    public boolean isTilt() { // checks within last second for a value past threshold
         if (tiltedRecently) return false;
         int pastThreshCount = 0;
         for (int i = 0; i < xQ.size(); ++i) {
             float x = xQ.get(i);
-            if (x <= THRESHOLD) {
+            if (Math.abs(x) >= Math.abs(threshold) && x / threshold > 0) {
                 ++pastThreshCount;
                 indexOfLastTilt = i;
             }

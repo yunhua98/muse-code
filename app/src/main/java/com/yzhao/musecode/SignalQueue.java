@@ -42,6 +42,8 @@ public class SignalQueue {
         return q.size();
     }
 
+    public Signal peekLast() { return q.peekLast(); }
+
     @Override
     public boolean equals(Object rhs) {
         if (rhs == null) return false;
@@ -53,5 +55,6 @@ public class SignalQueue {
         }
         return true;
     }
+
 
 }

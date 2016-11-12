@@ -71,10 +71,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private boolean accelStale;
 
     // these hold the state of our EKG data
-    // use MuseArtifactPacket.getBlink()
-    // use MuseArtifactPacket.getJawClench()
-    private boolean blink;
-    private boolean jawClench;
+
+
+    /**
+     * these hold the state of our EKG data. the last state variables are used to ensure we don't record
+     * multiple blinks or jaw clenches at a time
+     */
+    private boolean blink = false;
+    private boolean lastBlink = false;
+    private boolean jawClench = false;
+    private boolean lastJawClench = false;
 
     // for updating UI
     private final Handler handler = new Handler();
@@ -100,17 +106,29 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // list of current characters to be displayed
     private ArrayList<Character> charList = new ArrayList<>();
 
+<<<<<<< HEAD
     // TextView of the initial Morse code
     private TextView morseTextView;
 
     // adapter for the morseTextView
     private MorseAdapter mAdapter;
 
+=======
+<<<<<<< HEAD
+    // this holds the sequence of signals that we receive
+    private SignalQueue sigQ = new SignalQueue();
+=======
+>>>>>>> origin/master
     // TextView of the text translated from Morse
     private TextView translateTextView;
 
     // adapter for the translateTextView
+<<<<<<< HEAD
     private TranslationAdapter tAdapter;
+=======
+    private translationAdapter tAdapter;
+>>>>>>> origin/master
+>>>>>>> origin/master
 
     private final Runnable tickUi = new Runnable() {
         @Override
@@ -224,16 +242,39 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     // get the blink and jawClench data here
     public void receiveMuseArtifactPacket(final MuseArtifactPacket p, final Muse muse) {
+        lastBlink = blink;
         blink = p.getBlink();
+        lastJawClench = jawClench;
         jawClench = p.getJawClench();
+<<<<<<< HEAD
+        if(blink && jawClench) { // default to jaw clench if both occur
+            blink = false;
+        }
+        /**
+         * Note: for the signal queue, a signal constructed with true is a blink; false is a jaw clench
+         */
+        if(blink && ! lastBlink) { // if it's a blink and not a jaw clench, put that in the signalQueue
+            sigQ.add(new Signal(blink));
+        }
+        else if(jawClench && !lastJawClench) { // otherwise, if it's a jawClench (and not a continuous one), put it in the sigQueue as a jawClench
+            sigQ.add(new Signal(false));
+        }
+=======
         if (blink && jawClench) blink = false; // jawClench overrides blink
+>>>>>>> origin/master
     }
 
     // update the displayed EKG values
     public void updateEKG() {
         TextView blinkView = (TextView) findViewById(R.id.blink);
+<<<<<<< HEAD
+        blinkView.setText(String.format("blink: %d\n", (blink && !lastBlink) ? 1 : 0));
+        TextView jawView = (TextView) findViewById(R.id.jaw);
+        jawView.setText(String.format("jaw: %d\n", (jawClench && !lastJawClench ? 1:0)));
+=======
         blinkView.setText(String.format("blink: %d\n", (blink ? 1 : 0)));
 
+>>>>>>> origin/master
     }
 
     private void getAccelValues(MuseDataPacket p) {

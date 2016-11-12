@@ -43,6 +43,7 @@ import com.choosemuse.libmuse.Result;
 import com.choosemuse.libmuse.ResultLevel;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.choosemuse.libmuse.MuseDataPacketType.ACCELEROMETER;
@@ -82,6 +83,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     // check whether data transmission is enabled
     private boolean dataTransmission = true;
+
+    // left tilt threshold
+    private final float LEFT_THRESHOLD = -0.5f;
+
+    // nod threshold
+    private final float FRONT_THRESHOLD = 0.3f;
+
+    // running queue of data from accelerometer to determine nods for next character function
+    private AccelerometerData nodQ = new AccelerometerData(FRONT_THRESHOLD);
+
+    // running queue of data from accelerometer to determine left tilts for backspace function
+    private AccelerometerData backspaceQ = new AccelerometerData(LEFT_THRESHOLD);
+
+    // list of current characters to be displayed
+    private ArrayList<Character> charList = new ArrayList<>();
 
 
     private final Runnable tickUi = new Runnable() {
@@ -143,6 +159,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 muse.runAsynchronously();
             }
         }
+<<<<<<< HEAD
         else if(v.getId() == R.id.refresh) {
             manager.stopListening();
             manager.startListening();
@@ -177,6 +194,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         for (Muse m : list) {
             spinnerAdapter.add(m.getName() + " - " + m.getMacAddress());
         }
+=======
+>>>>>>> origin/master
     }
 
     public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
@@ -283,6 +302,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
+<<<<<<< HEAD
     // datalistener class goes here:
 
     class DataListener extends MuseDataListener {
@@ -362,5 +382,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             introDialog.show();
         }
     }
+=======
+    public void
+>>>>>>> origin/master
 }
 

@@ -45,7 +45,9 @@ public class MorseDictionary {
         Iterator it = morseAlpha.keySet().iterator();
         while (it.hasNext()) {
             char letter = (char) it.next();
-            if (s.equals(morseAlpha.get(letter))) return letter;
+            if (s.equals(morseAlpha.get(letter))) {
+                return letter;
+            }
         }
         Character m = Character.MIN_VALUE;
         return m;

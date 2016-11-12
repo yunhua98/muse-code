@@ -14,5 +14,5 @@ SignalQueue will have two constructors:
   - one from String
   - overloads the = operator
  
-Dictionary class:
+morseDictionary class:
   - default constructor initializes private HashMap: keys are SignalQueues, values are Characters

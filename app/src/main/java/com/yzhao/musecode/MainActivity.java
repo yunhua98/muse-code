@@ -100,6 +100,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // list of current characters to be displayed
     private ArrayList<Character> charList = new ArrayList<>();
 
+    //
+    private TextView translateTextView;
 
     private final Runnable tickUi = new Runnable() {
         @Override
@@ -130,6 +132,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         initUI();
 
         handler.post(tickUi);
+
+
     }
 
     @Override
@@ -340,6 +344,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         Spinner musesSpinner = (Spinner) findViewById(R.id.muses_spinner);
         musesSpinner.setAdapter(spinnerAdapter);
+
+        translateTextView = (TextView) findViewById(R.id.translate);
     }
 
     /**

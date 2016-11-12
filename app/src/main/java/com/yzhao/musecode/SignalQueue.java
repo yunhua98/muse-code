@@ -47,8 +47,7 @@ public class SignalQueue {
         if (rhs == null) return false;
         SignalQueue temp = (SignalQueue) rhs;
         if (temp.size() != q.size()) return false;
-        for (int i = 0; i < temp.size(); ++i) {
-            Signal s1 = q.poll();
+        for (Signal s1 : q) {
             Signal s2 = temp.poll();
             if (s1.isDash() != s2.isDash()) return false;
         }

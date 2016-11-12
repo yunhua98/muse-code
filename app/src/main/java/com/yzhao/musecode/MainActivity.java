@@ -301,6 +301,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             activityRef.get().receiveMuseConnectionPacket(p, muse);
         }
     }
+<<<<<<< Updated upstream
 
 <<<<<<< HEAD
     // datalistener class goes here:
@@ -385,5 +386,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 =======
     public void
 >>>>>>> origin/master
+=======
+>>>>>>> Stashed changes
 }
 

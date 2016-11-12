@@ -85,6 +85,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // for updating UI
     private final Handler handler = new Handler();
 
+
+    private int EMGcounter = 0;
+    private boolean EMGflag = false;
+
     // for the list of Muses
     private ArrayAdapter<String> spinnerAdapter;
 
@@ -92,10 +96,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private boolean dataTransmission = true;
 
     // left tilt threshold
-    private final float LEFT_THRESHOLD = -0.5f;
+    private final float LEFT_THRESHOLD = -0.25f;
 
     // nod threshold
-    private final float FRONT_THRESHOLD = 0.3f;
+    private final float FRONT_THRESHOLD = 0.35f;
 
     // running queue of data from accelerometer to determine nods for next character function
     private AccelerometerData nodQ = new AccelerometerData(FRONT_THRESHOLD);
@@ -106,21 +110,35 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // list of current characters to be displayed
     private ArrayList<Character> charList = new ArrayList<>();
 
-<<<<<<< HEAD
     // this holds the sequence of signals that we receive
     private SignalQueue sigQ = new SignalQueue();
-=======
+
     // TextView of the text translated from Morse
     private TextView translateTextView;
 
     // adapter for the translateTextView
-    private translationAdapter tAdapter;
->>>>>>> origin/master
+    //private translationAdapter tAdapter;
+
+    // test vars
+    private int blinkCount = 0;
+    private int jawCount = 0;
+    private int nodCount = 0;
+    private int tiltCount = 0;
+
 
     private final Runnable tickUi = new Runnable() {
         @Override
         public void run() {
-            updateEKG();
+            if(EMGflag) {
+                updateEMG();
+            }
+            else {
+                EMGcounter = (EMGcounter+1)%10;
+                if(EMGcounter == 0) {
+                    EMGflag = true;
+                }
+            }
+            updateHead();
             handler.postDelayed(tickUi, 1000 / 60);
         }
     };
@@ -233,7 +251,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         blink = p.getBlink();
         lastJawClench = jawClench;
         jawClench = p.getJawClench();
-<<<<<<< HEAD
+
         if(blink && jawClench) { // default to jaw clench if both occur
             blink = false;
         }
@@ -241,33 +259,42 @@ public class MainActivity extends Activity implements View.OnClickListener {
          * Note: for the signal queue, a signal constructed with true is a blink; false is a jaw clench
          */
         if(blink && ! lastBlink) { // if it's a blink and not a jaw clench, put that in the signalQueue
-            sigQ.add(new Signal(blink));
+            sigQ.add(new Signal(true));
         }
         else if(jawClench && !lastJawClench) { // otherwise, if it's a jawClench (and not a continuous one), put it in the sigQueue as a jawClench
             sigQ.add(new Signal(false));
         }
-=======
-        if (blink && jawClench) blink = false; // jawClench overrides blink
->>>>>>> origin/master
+
     }
 
-    // update the displayed EKG values
-    public void updateEKG() {
+    // update the displayed EMG values
+    public void updateEMG() {
         TextView blinkView = (TextView) findViewById(R.id.blink);
-<<<<<<< HEAD
-        blinkView.setText(String.format("blink: %d\n", (blink && !lastBlink) ? 1 : 0));
+        blinkCount += (blink && !lastBlink ? 1 : 0);
+        blinkView.setText(String.format("blink: %d\n", blinkCount));
         TextView jawView = (TextView) findViewById(R.id.jaw);
-        jawView.setText(String.format("jaw: %d\n", (jawClench && !lastJawClench ? 1:0)));
-=======
-        blinkView.setText(String.format("blink: %d\n", (blink ? 1 : 0)));
+        jawCount += (jawClench && !lastJawClench ? 1 : 0);
+        jawView.setText(String.format("jaw: %d\n", jawCount));
+        if((blink && !lastBlink) || (jawClench && !lastJawClench)) EMGflag = false;
 
->>>>>>> origin/master
+    }
+
+    // update the displayed Head Action values
+
+    public void updateHead() {
+        TextView nodText = (TextView) findViewById(R.id.nod);
+        nodCount += (nodQ.isTilt()? 1 : 0);
+        nodText.setText(String.format("head nod: %d\n", nodCount));
+        TextView tiltText = (TextView) findViewById(R.id.tilt);
+        tiltCount += (backspaceQ.isTilt()? 1 : 0);
+        tiltText.setText(String.format("head tilt: %d\n", tiltCount));
     }
 
     private void getAccelValues(MuseDataPacket p) {
-        accelBuffer[0] = p.getAccelerometerValue(Accelerometer.X);
-        accelBuffer[1] = p.getAccelerometerValue(Accelerometer.Y);
-        accelBuffer[2] = p.getAccelerometerValue(Accelerometer.Z);
+        nodQ.add((float)(p.getAccelerometerValue(Accelerometer.X)));
+        backspaceQ.add((float)(p.getAccelerometerValue(Accelerometer.Y)));
+        //accelBuffer[2] = p.getAccelerometerValue(Accelerometer.Z);
+
     }
 
     /**
@@ -291,7 +318,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 statusText.setText(status);
 
                 final MuseVersion museVersion = muse.getMuseVersion();
-                final TextView museVersionText = (TextView) findViewById(R.id.version);
+                //final TextView museVersionText = (TextView) findViewById(R.id.version);
                 // If we haven't yet connected to the headband, the version information
                 // will be null.  You have to connect to the headband before either the
                 // MuseVersion or MuseConfiguration information is known.
@@ -299,7 +326,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     final String version = museVersion.getFirmwareType() + " - "
                             + museVersion.getFirmwareVersion() + " - "
                             + museVersion.getProtocolVersion();
-                    museVersionText.setText(version);
+                    //museVersionText.setText(version);
                 } /*else {
                     museVersionText.setText(R.string.undefined);
                 }
@@ -383,8 +410,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         musesSpinner.setAdapter(spinnerAdapter);
 
         translateTextView = (TextView) findViewById(R.id.translation);
-        tAdapter = new TranslationAdapter(sigQ, nodQ, backspaceQ);
-        translateTextView.setAdapter(tAdapter);
+        //tAdapter = new TranslationAdapter(sigQ, nodQ, backspaceQ);
+        //translateTextView.setAdapter(tAdapter);
 
     }
 

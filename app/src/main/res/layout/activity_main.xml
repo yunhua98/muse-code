@@ -62,6 +62,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/jaw"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nod"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tilt"
+        />
 
 
 

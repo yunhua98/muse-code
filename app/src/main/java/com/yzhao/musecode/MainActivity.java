@@ -131,7 +131,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 muse.runAsynchronously();
             }
         }
-        }
     }
     public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
         // valuesSize returns the number of data values contained in the packet.
@@ -173,4 +172,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
             activityRef.get().receiveMuseConnectionPacket(p, muse);
         }
     }
+
+
+    // single axis accelerometer detection
+
 }

@@ -14,4 +14,11 @@ public class ExampleUnitTest {
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
     }
+
+    @Test
+    public void dictionary_isCorrect() throws Exception {
+        SignalQueue letter = new SignalQueue("..-");
+        MorseDictionary dict = new MorseDictionary();
+        assertEquals('U', dict.translate(letter));
+    }
 }

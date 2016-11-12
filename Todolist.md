@@ -9,6 +9,8 @@ Dictionary (wrapped HashMap) converting from a SignalQueue to letters -
 
 ***NOTES***
 
+Signal constructor: Signal(boolean b) // b = true for blink, false for clench
+
 SignalQueue will have two constructors:
   - one taking in data from Muse
   - one from String

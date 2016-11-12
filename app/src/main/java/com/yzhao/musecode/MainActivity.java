@@ -108,17 +108,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private AccelerometerData backspaceQ = new AccelerometerData(LEFT_THRESHOLD);
 
     // list of current characters to be displayed
-    private ArrayList<Character> charList = new ArrayList<>();
+    private StringBuilder translation = new StringBuilder();
 
-<<<<<<< HEAD
-    // this holds the sequence of signals that we receive
-    private SignalQueue sigQ = new SignalQueue();
-
-    // TextView of the text translated from Morse
-    private TextView translateTextView;
-
-    // adapter for the translateTextView
-    //private translationAdapter tAdapter;
+    // counter views
+    private TextView blinkView, jawView;
 
     // test vars
     private int blinkCount = 0;
@@ -126,12 +119,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private int nodCount = 0;
     private int tiltCount = 0;
 
-=======
     // morse dictionary converter
     private MorseDictionary dict = new MorseDictionary();
 
     // TextView of the initial Morse code
     private TextView morseTextView;
+    // list of morseCode strings
+    private ArrayList<String> morseSequences;
 
 
     // this holds the sequence of signals that we receive
@@ -140,8 +134,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     // TextView of the text translated from Morse
     private TextView translateTextView;
-
->>>>>>> origin/master
 
     private final Runnable tickUi = new Runnable() {
         @Override
@@ -155,7 +147,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     EMGflag = true;
                 }
             }
-            updateHead();
+            //updateHead();
+            updateTranslation();
             handler.postDelayed(tickUi, 1000 / 60);
         }
     };
@@ -267,42 +260,34 @@ public class MainActivity extends Activity implements View.OnClickListener {
         lastBlink = blink;
         blink = p.getBlink();
         lastJawClench = jawClench;
-<<<<<<< HEAD
         jawClench = p.getJawClench();
-
-=======
-        jawClench = p.getJawClench();]
->>>>>>> origin/master
         if(blink && jawClench) { // default to jaw clench if both occur
             blink = false;
         }
         /**
          * Note: for the signal queue, a signal constructed with true is a blink; false is a jaw clench
          */
-        if(blink && ! lastBlink) { // if it's a blink and not a jaw clench, put that in the signalQueue
-            sigQ.add(new Signal(true));
-        }
-        else if(jawClench && !lastJawClench) { // otherwise, if it's a jawClench (and not a continuous one), put it in the sigQueue as a jawClench
-            sigQ.add(new Signal(false));
-        }
 
-<<<<<<< HEAD
-=======
-        if (blink && jawClench) blink = false; // jawClench overrides blink
->>>>>>> origin/master
     }
 
     // update the displayed EMG values
     public void updateEMG() {
-        TextView blinkView = (TextView) findViewById(R.id.blink);
-<<<<<<< HEAD
+        blinkView = (TextView) findViewById(R.id.blink);
+
         blinkCount += (blink && !lastBlink ? 1 : 0);
         blinkView.setText(String.format("blink: %d\n", blinkCount));
-        TextView jawView = (TextView) findViewById(R.id.jaw);
+        jawView = (TextView) findViewById(R.id.jaw);
         jawCount += (jawClench && !lastJawClench ? 1 : 0);
         jawView.setText(String.format("jaw: %d\n", jawCount));
         if((blink && !lastBlink) || (jawClench && !lastJawClench)) EMGflag = false;
 
+        if(blink && ! lastBlink) { // if it's a blink and not a jaw clench, put that in the signalQueue
+            sigQ.add(new Signal(true));
+
+        }
+        else if(jawClench && !lastJawClench) { // otherwise, if it's a jawClench (and not a continuous one), put it in the sigQueue as a jawClench
+            sigQ.add(new Signal(false));
+        }
     }
 
     // update the displayed Head Action values
@@ -314,13 +299,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
         TextView tiltText = (TextView) findViewById(R.id.tilt);
         tiltCount += (backspaceQ.isTilt()? 1 : 0);
         tiltText.setText(String.format("head tilt: %d\n", tiltCount));
-=======
-        blinkView.setText(String.format("blink: %d\n", (blink && !lastBlink) ? 1 : 0));
-        TextView jawView = (TextView) findViewById(R.id.jaw);
-        jawView.setText(String.format("jaw: %d\n", (jawClench && !lastJawClench ? 1:0)));
-        blinkView.setText(String.format("blink: %d\n", (blink ? 1 : 0)));
+    }
 
->>>>>>> origin/master
+
+    public void updateTranslation() { // uses sigQ, nodQ, and backspaceQ to update text
+        if (nodQ.isTilt()) {
+            if (sigQ.size() == 0) translation.append(" ");
+            else {
+                char letter = dict.translate(sigQ);
+                if (letter != (char) Character.MIN_VALUE) translation.append(letter);
+            }
+            sigQ.clear(); // nodding clears current signal regardless of successful translation
+        }
+        else if (backspaceQ.isTilt()) {
+            translation.deleteCharAt(translation.length() - 1);
+            sigQ.clear();
+        }
+        translateTextView.setText(translation.toString());
     }
 
     private void getAccelValues(MuseDataPacket p) {
@@ -442,15 +437,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Spinner musesSpinner = (Spinner) findViewById(R.id.muses_spinner);
         musesSpinner.setAdapter(spinnerAdapter);
 
-        morseTextView = (TextView) findViewById(R.id.morseCode);
-        mAdapter = new MorseAdapter(sigQ, nodQ, backspaceQ);
-        morseTextView.setAdapter(mAdapter);
-
         translateTextView = (TextView) findViewById(R.id.translation);
-        //tAdapter = new TranslationAdapter(sigQ, nodQ, backspaceQ);
-        //translateTextView.setAdapter(tAdapter);
-
-
+        morseTextView = (TextView) findViewById(R.id.morse_code);
+        morseSequences = new ArrayList<>();
     }
 
     /**

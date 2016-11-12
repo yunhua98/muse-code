@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 public class SignalQueue {
 
-    private LinkedList<Signal> q;
+    private LinkedList<Character> q;
 
     public SignalQueue() {
         q = new LinkedList<>();
@@ -18,19 +18,19 @@ public class SignalQueue {
     public SignalQueue(String code) {
         q = new LinkedList<>();
         for (int i = 0; i < code.length(); ++i) {
-            q.add(new Signal(code.charAt(i)));
+            q.add(code.charAt(i));
         }
     }
 
-    public void add(Signal s) {
-        q.add(s);
+    public void add(char signal) {
+        q.add(signal);
     }
 
-    public Signal poll() {
+    public char poll() {
         return q.poll();
     }
 
-    public Signal peek() {
+    public char peek() {
         return q.peek();
     }
 
@@ -42,16 +42,16 @@ public class SignalQueue {
         return q.size();
     }
 
-    public Signal peekLast() { return q.peekLast(); }
+    public char peekLast() { return q.peekLast(); }
 
     @Override
     public boolean equals(Object rhs) {
         if (rhs == null) return false;
         SignalQueue temp = (SignalQueue) rhs;
         if (temp.size() != q.size()) return false;
-        for (Signal s1 : q) {
-            Signal s2 = temp.poll();
-            if (s1.isDash() != s2.isDash()) return false;
+        for (char s1 : q) {
+            char s2 = temp.poll();
+            if (s1 != s2) return false;
         }
         return true;
     }

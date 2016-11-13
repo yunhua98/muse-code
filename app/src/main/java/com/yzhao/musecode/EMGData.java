@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 public class EMGData {
 
-    private final int LENGTH = 13; // 13/50 = ~.25 seconds minimum between actions
+    private final int LENGTH = 5; // 5/50 = .1 seconds minimum between actions
 
     LinkedList<Boolean> data; // holds our boolean values (whether a muscle movement occured or not)
 
@@ -23,7 +23,7 @@ public class EMGData {
         }
     }
 
-    public boolean actionOccured() {
+    public boolean actionOccured(int threshold) {
         int totOn = 0;
         if(data.size() == LENGTH) { // if we have sufficient data points, check if we have at least two true values
             for(int i = 0; i<LENGTH; i++) {
@@ -31,7 +31,7 @@ public class EMGData {
                     totOn++;
                 }
             }
-            if(totOn >= 2) {
+            if(totOn >= threshold) {
                 return true;
             }
         }

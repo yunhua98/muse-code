@@ -4,6 +4,10 @@ Muse Code is a hands-free communication Android app using Morse code and the Mus
 
 Team: Liam Kelly, Stanley Xiang, Kevin Yang, Yunhua Zhao
 
+Video:
+
+https://www.youtube.com/watch?v=uRCgeQAklmw
+
 Screenshot:
 
-<img src="muse-code-screen.png" width="540"/>
+<img src="muse-code-screen.png" width="490"/>

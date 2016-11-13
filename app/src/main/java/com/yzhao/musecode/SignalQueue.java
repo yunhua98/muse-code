@@ -6,7 +6,7 @@ import java.util.LinkedList;
  * Created by yunhuazhao on 11/12/16.
  */
 
-public class SignalQueue {
+public class SignalQueue { // just a wrapper for queue/linkedlist with alternate constructor to make dictionary construciton easier
 
     private LinkedList<Character> q;
 
@@ -42,15 +42,24 @@ public class SignalQueue {
         return q.size();
     }
 
+    public char get(int i) { return q.get(i); }
+
     public char peekLast() { return q.peekLast(); }
+
+    public String toString() {
+        String output = "";
+        for (char c : q) output += c;
+        return output;
+    }
 
     @Override
     public boolean equals(Object rhs) {
         if (rhs == null) return false;
         SignalQueue temp = (SignalQueue) rhs;
         if (temp.size() != q.size()) return false;
-        for (char s1 : q) {
-            char s2 = temp.poll();
+        for (int i = 0; i < q.size(); ++i) {
+            char s1 = q.get(i);
+            char s2 = temp.get(i);
             if (s1 != s2) return false;
         }
         return true;

@@ -47,6 +47,10 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+// for text to speech
+import android.speech.tts.TextToSpeech;
+import java.util.Locale;
+
 import static com.choosemuse.libmuse.MuseDataPacketType.ACCELEROMETER;
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -101,11 +105,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // nod threshold
     private final float FRONT_THRESHOLD = 0.3f;
 
+    // tts threshold
+    private final float BACK_THRESHOLD = -0.2f;
+
     // running queue of data from accelerometer to determine nods for next character function
     private AccelerometerData nodQ = new AccelerometerData(FRONT_THRESHOLD);
 
     // running queue of data from accelerometer to determine left tilts for backspace function
     private AccelerometerData backspaceQ = new AccelerometerData(LEFT_THRESHOLD);
+
+    // running queue of data from accelerometer to determine upward nods for text-to-speech function
+    private AccelerometerData ttsQ = new AccelerometerData(BACK_THRESHOLD);
 
     // list of current characters to be displayed
     private StringBuilder translation = new StringBuilder("Translation: ");
@@ -149,6 +159,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // check if the muse is on the forehead
     private boolean onForehead = false;
 
+
+    // for texttospeech
+    TextToSpeech t1;
+
     private final Runnable tickUi = new Runnable() {
         @Override
         public void run() {
@@ -160,6 +174,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        t1 = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    t1.setLanguage(Locale.UK); // british english is best english
+                }
+            }
+        });
         manager = MuseManagerAndroid.getInstance();
         manager.setContext(this);
 
@@ -364,6 +386,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             sigQ.clear();
             packetCounter = 1; // ignore 5 artifact packets
         }
+        if (ttsQ.isTilt()) { // NOT else if, don't want to be overridden
+            t1.speak(translation.toString(), TextToSpeech.QUEUE_FLUSH, null); // deprecated but oh well
+        }
         //StringBuilder sb = new StringBuilder();
         //for (StringBuilder s : morseSequences) sb.append(s);
         morseTextView.setText(/*sb.toString()*/"Current signals: " + sigQ.toString());
@@ -372,6 +397,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void getAccelValues(MuseDataPacket p) {
         nodQ.add((float)(p.getAccelerometerValue(Accelerometer.X)));
+        ttsQ.add((float)(p.getAccelerometerValue(Accelerometer.X)));
         backspaceQ.add((float)(p.getAccelerometerValue(Accelerometer.Y)));
         //accelBuffer[2] = p.getAccelerometerValue(Accelerometer.Z);
 

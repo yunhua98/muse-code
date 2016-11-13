@@ -34,7 +34,7 @@ public class AccelerometerData {
         int pastThreshCount = 0;
         for (int i = 0; i < xQ.size(); ++i) {
             float x = xQ.get(i);
-            if (Math.abs(x) >= Math.abs(threshold) && x / threshold > 0) {
+            if (Math.abs(x) >= Math.abs(threshold) && x * threshold > 0) {
                 ++pastThreshCount;
                 indexOfLastTilt = i;
             }

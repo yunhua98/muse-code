@@ -18,10 +18,16 @@
     <TextView
         android:id="@+id/con_status"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="16sp"
         android:text="unknown" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/morse_guide"
+        tools:text="A: .- B: -... C: -.-. D: -.. E: . F: ..-. G: --. H: .... I: .. J: .--- K: -.- L: .-.. M: -- N: -. O: --- P: .--. Q: --.- R: .-. S: ... T: - U: ..- V; ...- W: .-- X: -..- Y: -.-- Z: --.." />
 
     <TextView
         android:text="Morse Code"
